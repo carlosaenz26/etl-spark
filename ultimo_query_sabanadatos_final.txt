@@ -1,0 +1,94 @@
+IF NOT EXISTS (SELECT * FROM sys.external_file_formats WHERE name = 'SynapseParquetFormat') 
+	CREATE EXTERNAL FILE FORMAT [SynapseParquetFormat] 
+	WITH ( FORMAT_TYPE = PARQUET)
+GO
+
+IF NOT EXISTS (SELECT * FROM sys.external_data_sources WHERE name = 'gold_sabigdataacept_dfs_core_windows_net') 
+	CREATE EXTERNAL DATA SOURCE [gold_sabigdataacept_dfs_core_windows_net] 
+	WITH (
+		LOCATION = 'abfss://gold@sabigdataacept.dfs.core.windows.net' 
+	)
+GO
+DROP EXTERNAL TABLE GAI.PROBABILISTICO;
+
+CREATE EXTERNAL TABLE GAI.PROBABILISTICO (
+	[Idben1] nvarchar(4000),
+	[prediccion] float,
+	[NoToma] int,
+	[AnioToma] int,
+	[tallaMuestraAnterior] numeric(18,2),
+	[RegimenSeguridadSocial] nvarchar(4000),
+	[Toma] nvarchar(4000),
+	[IdDireccionesICBF] int,
+	[DireccionICBF] nvarchar(4000),
+	[NombreServicio] nvarchar(4000),
+	[IdBeneficiario] numeric(18,0),
+	[FechaNacimientoBeneficiario] date,
+	[EdadBeneficiarioDias] int,
+	[EdadBeneficiarioMeses] float,
+	[EdadBeneficiarioAnios] int,
+	[SemanasBeneficiario] nvarchar(4000),
+	[CodDocumento] nvarchar(4000),
+	[NumeroDocumento] nvarchar(4000),
+	[PrimerNombre] nvarchar(4000),
+	[SegundoNombre] nvarchar(4000),
+	[PrimerApellido] nvarchar(4000),
+	[SegundoApellido] nvarchar(4000),
+	[tipobeneficiario] nvarchar(4000),
+	[sexo] nvarchar(4000),
+	[NombreSexo] nvarchar(4000),
+	[EdadMesesBenAlaTomaNut] numeric(17,0),
+	[CodPaisNacimientoBeneficiario] nvarchar(4000),
+	[NombPaisNacimientoBeneficiario] nvarchar(4000),
+	[CodPaisRasidenciaBen] nvarchar(4000),
+	[NombPaisRasidenciaBen] nvarchar(4000),
+	[CodDepartamentoResidenciaBen] nvarchar(4000),
+	[NomDepartamentoResidenciaBen] nvarchar(4000),
+	[CodMunicipResidenciaBen] nvarchar(4000),
+	[NomMunicipResidenciaBen] nvarchar(4000),
+	[CodComunaResidenciaBen] nvarchar(4000),
+	[NomComunaResidenciaBen] nvarchar(4000),
+	[CodBarrioResidenciaBen] nvarchar(4000),
+	[NomBarrioResidenciaBen] nvarchar(4000),
+	[CodVeredaResidenciaBen] nvarchar(4000),
+	[NomVeredaResidenciaBen] nvarchar(4000),
+	[CodRancheriaResidenciaBen] int,
+	[NomRancheriaResidenciaBen] nvarchar(4000),
+	[PresentaDiscapacidad] nvarchar(4000),
+	[ZonaUbicacionBeneficiario] nvarchar(4000),
+	[GrupoEtnico] nvarchar(4000),
+	[MesesLactanciaMaternaExclusiva] int,
+	[MesesLactanciaMaternaTotal] int,
+	[PesoBeneficiarioAlNacer] numeric(18,2),
+	[TallaBeneficiarioAlNacer] numeric(18,2),
+	[AntecendentePremadurez] nvarchar(4000),
+	[EdadGestacionarAlNacer] int,
+	[FechaValoracionNuricional] datetime2(7),
+	[FechaMedicionPerimetroBraquial] datetime2(7),
+	[MedicionPerimetroBraquial] numeric(18,1),
+	[peso] numeric(18,2),
+	[Talla] numeric(18,2),
+	[ZScoreTallaEdad] numeric(18,2),
+	[ZScorePesoEdad] numeric(18,2),
+	[ZScorePesoTalla] numeric(18,2),
+	[ZScoreIMC] numeric(18,2),
+	[EstadoTallaEdad] nvarchar(4000),
+	[EstadoPesoEdad] nvarchar(4000),
+	[EstadoPesoTalla] nvarchar(4000),
+	[EstadoIMC] nvarchar(4000),
+	[Flag] int,
+	[FechaRegistroSaludNutricion] datetime2(7),
+	[PresentaCarneVacunacion] nvarchar(4000),
+	[ControlesCrecimDesarrollo] int,
+	[Fecha_Consulta] nvarchar(4000)
+	)
+	WITH (
+	LOCATION = 'icbf-gai/BaseModeloProbabilisticoGrafica/*.parquet',
+	DATA_SOURCE = [gold_sabigdataacept_dfs_core_windows_net],
+	FILE_FORMAT = [SynapseParquetFormat]
+	)
+GO
+
+
+SELECT TOP 100 * FROM GAI.PROBABILISTICO
+GO
